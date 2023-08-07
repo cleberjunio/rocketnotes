@@ -25,7 +25,7 @@ export function SignUp() {
       // se deu tudo certo com a conexão
       .then(() => {
         alert("Usuário cadastrado com sucesso!"); 
-        
+
         //depois de cadastrar manda o usuário para a tela de login 
         navigate("/");
       })
@@ -68,7 +68,7 @@ export function SignUp() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Button title="Cadastrar" onClick={handleSignUp} />
+        <Button title="Cadastrar" onClick={ handleSignUp } />
 
         <Link to="/">Voltar para o login</Link>
       </Form>
