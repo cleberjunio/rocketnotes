@@ -41,22 +41,22 @@ function AuthProvider({ children }) {
 
   //Recebendo os dados do usuário pra atualizar
   async function updateProfile({ user, avatarFile }) {
-    /* try {
-      await api.put("/users", user);
-
-      //setItem serve para substituir o conteúdo do usuário.
-      localStorage.setItem("@rocketnotes:user", JSON.stringify(user)); */
-
       try {
-        // Remove a senha do objeto "user"
-       /*  const { password, ...userData } = user;
-    
-        await api.put("/users", userData); */
+        if(avatarFile){
+          
+          //enviando avatar pro banco de dados
+          const fileUploadForm = new FormData()
+          fileUploadForm.append('avatar', avatarFile);
 
+          const response = await api.patch('/users/avatar', fileUploadForm);
+          user.avatar = response.data.avatar;
+        }
+                  
+        // Remove a senha do objeto "user"
         const updatedUserResponse = await api.put('/users', user);
         const updatedUser = updatedUserResponse.data;
         
-        // Armazena o objeto "userData" sem a senha no localStorage
+        // Armazena o objeto "user" sem a senha no localStorage
         localStorage.setItem("@rocketnotes:user", JSON.stringify(updatedUser));
 
       setData({ user: updatedUser, token: data.token });
