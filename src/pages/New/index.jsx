@@ -6,15 +6,35 @@ import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
 import { Input } from "../../components/Input";
 import { useState } from "react";
+import { useEffect } from "react";
+import { api } from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 import { Container, Form } from "./styles";
 
 export function New() {
+
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+
+
+  const [tags, setTags] = useState([])
+  const [newTags, setNewTags] = useState("")
+
+  const navigate = useNavigate();
+ 
+ /*  useEffect(() => {
+    console.log(tags);
+    
+}, [tags]);
+ */
+
   //Estado que guarda todos os links através de um array
   const [links, setLinks] = useState([]);
 
   //Estado para adicionar novos links no momento, em formato de string
   const [newLink, setNewLink] = useState("");
+
 
   //Função de adicionar novo Link
   function handleAddLink(){
@@ -34,9 +54,7 @@ export function New() {
     setLinks(prevState => prevState.filter(link => link !== deleted));
   }
 
-  const [tags, setTags] = useState([])
-  const [newTags, setNewTags] = useState("")
-
+ 
   function handleAddTag(){
     setTags(prevState => [...prevState, newTags]);
     setNewTags("");
@@ -46,8 +64,24 @@ export function New() {
   }
 
   function handleRemoveTag(deleted){
-    setTags(prevState =>prevState.filter(tag => tag !== deleted))
+    //atualize o estado com um novo array
+    // apenas com tags diferentes da que eu passei como parâmetro na função
+  setTags(prevState => prevState.filter(tag =>tag !== deleted))
   }
+
+ 
+
+  async function handleCreateNewNote(){
+    await api.post("/notes", {
+      title,
+      description,
+      tags,
+      links
+    });  
+    alert('Nota criada com sucesso!!');
+    navigate('/');
+  }
+
   return (
     <Container>
       <Header />
@@ -57,18 +91,26 @@ export function New() {
             <h1>Criar nota</h1>
             <Link to="/">voltar</Link>
           </header>
-          <Input placeholder="Título" />
-          <Textarea placeholder="Observações" />
+          <Input
+           placeholder="Título" 
+           onChange={e => setTitle(e.target.value)}
+           
+           />
+          <Textarea
+           placeholder="Observações"
+           onChange ={e => setDescription(e.target.value)}
+           />
           
           <Section title="Links úteis">
                       
-            { //utilizando a variável de estado(links) para mostrar os links adicionados.
+            { //utilizando a variável de estado(links) para mostrar os links adicionados
+              //componentes gerados a partir de listas(map).
                       //valor, posição
               links.map((link, index) => (
                 <NoteItem  
                 key={String(index)}//sempre que tem algum componente renderizado por uma lista, precisa de uma key
                 value={link}//recuperando o valor de link da minha lista(link)
-                onClick={() => {handleRemoveLink(link) }}
+                onClick={() => {handleRemoveLink(link)}}
                 />  
               ))
             }
@@ -104,7 +146,10 @@ export function New() {
             </div>
           </Section>
 
-          <Button title="Salvar"/>
+          <Button
+           title="Salvar"
+           onClick ={handleCreateNewNote}
+           />
         </Form>
       </main>
     </Container>
