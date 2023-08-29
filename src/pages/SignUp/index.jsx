@@ -68,7 +68,7 @@ export function SignUp() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Button title="Cadastrar" onClick={ handleSignUp } />
+        <Button title="Cadastrar" onClick={handleSignUp} />
 
         <Link to="/">Voltar para o login</Link>
       </Form>

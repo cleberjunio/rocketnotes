@@ -28,6 +28,7 @@ function AuthProvider({ children }) {
         alert("Não foi possível entrar");
       }
     }
+   
   }
 
   //Função para deslogar usuário
