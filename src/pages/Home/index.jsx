@@ -9,11 +9,20 @@ import { api } from "../../services/api";
 import { Brand, Container, Content, Menu, NewNote, Search } from "./styles";
 
 export function Home() {
+  const [search, setSearch] = useState([]);
   const [tags, setTags] = useState([]);
   const [tagsSelected, setTagsSelected] = useState([]);
+  const [notes, setNotes] = useState([]);
 
-  async function handleTagsSelected(tagName) {
-    setTagsSelected((prevState) => [...prevState, tagName]);
+  function handleTagSelected(tagName) {
+    const alreadySelected = tagsSelected.includes(tagName);
+
+    if (alreadySelected) {
+      const filteredTags = tagsSelected.filter((tag) => tag !== tagName);
+      setTagsSelected(filteredTags);
+    } else {
+      setTagsSelected((prevState) => [...prevState, tagName]);
+    }
   }
 
   useEffect(() => {
@@ -22,8 +31,17 @@ export function Home() {
       setTags(response.data);
     }
     fetchTags();
-  },[]);
+  }, []);
 
+  useEffect(() => {
+    async function fetchNotes() {
+      const response = await api.get(`/notes?title=${search}&tags=${tagsSelected}`);
+      setNotes(response.data);
+    }
+    
+    fetchNotes();
+  }, [tagsSelected, search]);
+  
   //recebendo como parâmetro o nome da tag selecionada no momento
 
   return (
@@ -36,7 +54,7 @@ export function Home() {
         <li>
           <ButtonText
             title="Todos"
-            onClick={handleTagsSelected("all")}
+            onClick={() => handleTagSelected("all")}
             $isactive={tagsSelected.length === 0}
           />
         </li>
@@ -47,27 +65,29 @@ export function Home() {
               <li key={String(tag.id)}>
                 <ButtonText
                   title={tag.name}
-                  onClick={handleTagsSelected(tag.name)}
-                  $isactive={tagsSelected.length.includes(tag.name)}
+                  onClick={() => handleTagSelected(tag.name)}
+                  $isactive={tagsSelected.includes(tag.name)}
                 />
               </li>
             ))
         }
       </Menu>
       <Search>
-        <Input placeholder="Pesquisar pelo título" />
+        <Input
+          placeholder="Pesquisar pelo título"
+          onChange={() => setSearch(e.target.value)}
+        />
       </Search>
       <Content>
         <Section title="Minhas notas">
-          <Note
-            data={{
-              title: "React Modal",
-              tags: [
-                { id: "1", name: "react" },
-                { id: "2", name: "front-End" },
-              ],
-            }}
-          />
+          {
+            notes.map(note => (
+              <Note 
+                key={String(note.id)}
+                data={note}
+              />
+           ))
+          }
         </Section>
       </Content>
       <NewNote to="/new">

@@ -113,10 +113,7 @@ export function New() {
                 <NoteItem
                   key={String(index)} //sempre que tem algum componente renderizado por uma lista, precisa de uma key
                   value={link} //recuperando o valor de link da minha lista(link)
-                  onClick={() => {
-                    handleRemoveLink(link);
-                  }}
-                />
+                  onClick={() => {handleRemoveLink(link)}}/>
               ))
             }
             <NoteItem
@@ -124,7 +121,7 @@ export function New() {
               placeholder="Novo link"
               value={newLink}
               onChange={(e) => setNewLink(e.target.value)}
-              onClick={handleAddLink(true)}
+              onClick={handleAddLink}
             />
           </Section>
 
@@ -134,17 +131,16 @@ export function New() {
                 <NoteItem
                   key={String(index)}
                   value={tag}
-                  onClick={() => {
-                    handleRemoveTag(tag);
-                  }}
+                  onClick={() => {handleRemoveTag(tag);}}
                 />
-              ))}
+               ))
+              }
               <NoteItem
                 isNew
                 placeholder="Nova tag"
                 onChange={(e) => setNewTags(e.target.value)}
                 value={newTags}
-                onClick={handleAddTag(true)}
+                onClick={handleAddTag}
               />
             </div>
           </Section>
