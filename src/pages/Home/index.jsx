@@ -9,12 +9,16 @@ import { api } from "../../services/api";
 import { Brand, Container, Content, Menu, NewNote, Search } from "./styles";
 
 export function Home() {
-  const [search, setSearch] = useState([]);
+  const [search, setSearch] = useState("");
   const [tags, setTags] = useState([]);
   const [tagsSelected, setTagsSelected] = useState([]);
   const [notes, setNotes] = useState([]);
 
   function handleTagSelected(tagName) {
+    if(tagName === "all"){
+      return setTagsSelected([]);
+    }
+
     const alreadySelected = tagsSelected.includes(tagName);
 
     if (alreadySelected) {
