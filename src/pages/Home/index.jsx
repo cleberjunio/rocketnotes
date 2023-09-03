@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FiPlus } from "react-icons/fi";
+import { FiPlus,FiSearch } from "react-icons/fi";
 import { ButtonText } from "../../components/ButtonText";
 import { Header } from "../../components/Header";
 import { Input } from "../../components/Input";
@@ -18,9 +18,11 @@ export function Home() {
     if(tagName === "all"){
       return setTagsSelected([]);
     }
-
+    //devolve um verdadeiro ou falso
     const alreadySelected = tagsSelected.includes(tagName);
 
+    // Faz um filtro nas tags  para percorrer o array e comparar
+    // se a tag está selecionada.Se está(if) desmarca a tag, se não(else) então marca todas tags.
     if (alreadySelected) {
       const filteredTags = tagsSelected.filter((tag) => tag !== tagName);
       setTagsSelected(filteredTags);
@@ -40,6 +42,7 @@ export function Home() {
   useEffect(() => {
     async function fetchNotes() {
       const response = await api.get(`/notes?title=${search}&tags=${tagsSelected}`);
+      console.log(response.data);
       setNotes(response.data);
     }
     
@@ -80,6 +83,7 @@ export function Home() {
         <Input
           placeholder="Pesquisar pelo título"
           onChange={() => setSearch(e.target.value)}
+          icon={FiSearch}
         />
       </Search>
       <Content>
