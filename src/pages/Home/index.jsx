@@ -42,8 +42,9 @@ export function Home() {
   useEffect(() => {
     async function fetchNotes() {
       const response = await api.get(`/notes?title=${search}&tags=${tagsSelected}`);
-      console.log(response.data);
+      
       setNotes(response.data);
+      console.log(response.data)
     }
     
     fetchNotes();
@@ -67,8 +68,7 @@ export function Home() {
         </li>
         {
           //existe conteúdo dentro do estado tags?
-          tags &&
-            tags.map((tag) => (
+          tags && tags.map((tag) => (
               <li key={String(tag.id)}>
                 <ButtonText
                   title={tag.name}
@@ -82,22 +82,22 @@ export function Home() {
       <Search>
         <Input
           placeholder="Pesquisar pelo título"
-          onChange={() => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
           icon={FiSearch}
         />
       </Search>
-      <Content>
-        <Section title="Minhas notas">
-          {
-            notes.map(note => (
-              <Note 
-                key={String(note.id)}
-                data={note}
-              />
-           ))
-          }
-        </Section>
-      </Content>
+        <Content>
+          <Section title="Minhas notas">
+            {
+              notes.map(note => (
+                <Note 
+                  key={String(note.id)}
+                  data={note}
+                />
+            ))
+            }
+          </Section>
+        </Content>
       <NewNote to="/new">
         <FiPlus />
         Criar Nota
