@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
+import { ButtonText } from "../../components/ButtonText"
 import { Header } from "../../components/Header";
 import { Input } from "../../components/Input";
 import { NoteItem } from "../../components/NoteItem";
@@ -9,6 +10,7 @@ import { Textarea } from "../../components/Textarea";
 import { api } from "../../services/api";
 
 import { Container, Form } from "./styles";
+
 
 export function New() {
   const [title, setTitle] = useState("");
@@ -19,13 +21,11 @@ export function New() {
 
   const navigate = useNavigate();
 
-  /*  useEffect(() => {
-    console.log(tags);
-    
-}, [tags]);
- */
-
-  //Estado que guarda todos os links através de um array
+  function handleNavigate(){
+    navigate(-1);
+  }
+  
+    //Estado que guarda todos os links através de um array
   const [links, setLinks] = useState([]);
 
   //Estado para adicionar novos links no momento, em formato de string
@@ -83,7 +83,7 @@ export function New() {
 
     alert("Nota criada com sucesso!!");
 
-    navigate("/");
+    navigate(-1);
   }
 
   return (
@@ -93,7 +93,10 @@ export function New() {
         <Form>
           <header>
             <h1>Criar nota</h1>
-            <Link to="/">voltar</Link>
+            <ButtonText 
+              title="voltar" 
+              onClick={handleNavigate}
+            />
           </header>
           <Input
             placeholder="Título"

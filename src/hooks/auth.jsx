@@ -52,15 +52,18 @@ function AuthProvider({ children }) {
           const response = await api.patch('/users/avatar', fileUploadForm);
           user.avatar = response.data.avatar;
         }
+
+        await api.put('/users',user)
+
                   
-        // Remove a senha do objeto "user"
+        /* // Remove a senha do objeto "user"
         const updatedUserResponse = await api.put('/users', user);
-        const updatedUser = updatedUserResponse.data;
+        const updatedUser = updatedUserResponse.data; */
         
         // Armazena o objeto "user" sem a senha no localStorage
-        localStorage.setItem("@rocketnotes:user", JSON.stringify(updatedUser));
+        localStorage.setItem("@rocketnotes:user", JSON.stringify(user));
 
-      setData({ user: updatedUser, token: data.token });
+      setData({ user, token: data.token });
 
       alert("Perfil atualizado!");
     } catch (error) {
@@ -94,7 +97,7 @@ function AuthProvider({ children }) {
         SignIn,
         SignOut,
         updateProfile,
-        user: data.user,
+        user: data.user
       }}
     >
       {children}
